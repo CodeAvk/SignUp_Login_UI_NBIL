@@ -1,4 +1,4 @@
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager,Screen
@@ -53,6 +53,7 @@ class SignUpScreen(Screen):
                         any(not c.isalnum() for c in password)):
                     error_label.text = "Password must include letters, numbers, and special characters."
                 else:
+                    
                     # Reset all TextInput fields to default values
                     first_name_input.text = ""
                     last_name_input.text = ""
@@ -61,22 +62,26 @@ class SignUpScreen(Screen):
                     password_input.text = ""
 
                     # Transition to the LoginScreen
-                    App.get_running_app().root.current = "Login"
+                    MDApp.get_running_app().root.current = "Login"
 
    
 
 
 class LoginScreen(Screen):
     pass
+class ForgotPasswordScreen(Screen):
+    pass
 
 class WindowManager(ScreenManager):
     pass
-kv=Builder.load_file('new_window.kv')
 
 
 
-class AwesomeApp(App):
+
+class AwesomeApp(MDApp):
     def build(self):
+        kv=Builder.load_file('new_window.kv')
+         
         return kv
     
 

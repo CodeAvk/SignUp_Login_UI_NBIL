@@ -9,10 +9,11 @@
 
 ## Features
 
-- **Signup and Login:** Secure user authentication with signup and login screens.
-- **Control Interface:** Intuitive control interface for managing 3D bioprinting processes.
-- **Forgot Password:** Password recovery functionality with a Forgot Password screen.
-- **Customizable:** Easily customize the software to suit your bioprinting needs.
+- 🔐 **Signup and Login:** Secure user authentication with signup and login screens.
+- 🎮 **Control Interface:** Intuitive control interface for managing 3D bioprinting processes.
+- 🙁 **Forgot Password:** Password recovery functionality with a Forgot Password screen.
+- 🛠️ **Customizable:** Easily customize the software to suit your bioprinting needs.
+
 
 ## Installation
 

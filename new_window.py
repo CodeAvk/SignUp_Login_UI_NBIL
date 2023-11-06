@@ -4,9 +4,23 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager,Screen
 from kivy.core.window import Window
 from kivy.uix.textinput import TextInput
+import pyrebase
 
 
 class SignUpScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        firebase_conf = {
+                "apiKey": "AIzaSyDKvwq5IpvotqYPhynB-_G_ReY_Mylg254",
+                "authDomain": "niyantranam-backend.firebaseapp.com",
+                "projectId": "niyantranam-backend",
+                "storageBucket": "niyantranam-backend.appspot.com",
+                "messagingSenderId": "715506007512",
+                "appId": "1:715506007512:web:0efbc6d8fe1817c69ac6ad",
+                "measurementId": "G-8QKM6T52XY"
+}
+        firebase=pyrebase.initialize_app(firebase_conf)
+        db=firebase.database()
     def check_inputs(self):
         # Get references to your TextInput widgets
         first_name_input = self.ids.first_name_input
@@ -81,6 +95,8 @@ class WindowManager(ScreenManager):
 class AwesomeApp(MDApp):
     def build(self):
         kv=Builder.load_file('new_window.kv')
+
+
          
         return kv
     

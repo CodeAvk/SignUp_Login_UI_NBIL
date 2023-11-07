@@ -13,6 +13,7 @@ class SignUpScreen(Screen):
         firebase_conf = {
                 "apiKey": "AIzaSyDKvwq5IpvotqYPhynB-_G_ReY_Mylg254",
                 "authDomain": "niyantranam-backend.firebaseapp.com",
+                "databaseURL": "https://niyantranam-backend-default-rtdb.firebaseio.com",
                 "projectId": "niyantranam-backend",
                 "storageBucket": "niyantranam-backend.appspot.com",
                 "messagingSenderId": "715506007512",
@@ -20,7 +21,37 @@ class SignUpScreen(Screen):
                 "measurementId": "G-8QKM6T52XY"
 }
         firebase=pyrebase.initialize_app(firebase_conf)
-        db=firebase.database()
+        self.db=firebase.database() #by using self.db we can acces it in creator function
+        data1={"Email":"xyz@gmail1.com","Password":"123"}
+        data2={"Email":"xyz@gmail2.com","Password":"123"}
+        data3={"Email":"xyz@gmail3.com","Password":"123"}
+        # db.child("Parent").push(data) 
+        # defining custome key for data
+        # db.child("CustomKey1").set(data1)
+        # db.child("CustomKey2").set(data2)
+        # db.child("CustomKey3").set(data3)
+        # reading Data
+        # database_data=db.get()
+        # print(database_data.val())
+        # for s_d in database_data.each():
+        #     print(s_d.val())
+    def creator(self):
+        first_name_input = self.ids.first_name_input.text
+        last_name_input = self.ids.last_name_input.text
+        organization_input = self.ids.organization_input.text
+        email_input = self.ids.email_input.text
+        password_input = self.ids.password_input.text
+        data = {
+        "first_name": first_name_input,
+        "last_name": last_name_input,
+        "organization": organization_input,
+        "email": email_input,
+        "password": password_input
+    }
+        self.db.child(first_name_input).set(data)
+        MDApp.get_running_app().root.current = "Login"
+
+
     def check_inputs(self):
         # Get references to your TextInput widgets
         first_name_input = self.ids.first_name_input
@@ -82,7 +113,9 @@ class SignUpScreen(Screen):
 
 
 class LoginScreen(Screen):
-    pass
+      pass
+    
+
 class ForgotPasswordScreen(Screen):
     pass
 
@@ -95,6 +128,7 @@ class WindowManager(ScreenManager):
 class AwesomeApp(MDApp):
     def build(self):
         kv=Builder.load_file('new_window.kv')
+        
 
 
          

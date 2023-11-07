@@ -180,13 +180,14 @@ WindowManager:
                         background_color: 0, 0, 0, 1
                             
                     MyButton:
-                        text: 'LOGIN'
+                        text: 'Sign Up'
                         size_hint: None, None
                         size: 200, 40
                         pos_hint: {'center_x': 0.5}
                         font_size:20
                         bold: True
-                        on_release: app.root.current="Login"
+                        # on_release: app.root.current="Login"
+                        on_release: root.creator()
                     Label:
                         text: ''
                         size_hint: None, None
@@ -321,7 +322,7 @@ WindowManager:
                     #         bold: True  # Adjust the width as needed
 
                     MDTextField:
-                        id: userid_input
+                        id: username_input
                         hint_text: 'Username'
                         icon_right: 'account'
                         # required:True
@@ -419,7 +420,7 @@ WindowManager:
                             pos_hint: {'center_x': 0.5}
                             font_size:20
                             bold: True
-                            on_release: root.check_inputs()
+                            on_release: root.print()
                         MyButton:
                             text: 'Forgot Password'
                             size_hint: None, None

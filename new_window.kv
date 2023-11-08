@@ -84,7 +84,7 @@ WindowManager:
                             # color: 1, 0, 0, 1
                             # color: 0.7, 0.7, 0.7, 1
                     MDLabel:
-                        text: 'WelCome to Niyantranam'
+                        text: 'Welcome to Niyantranam'
                         size_hint: None, None
                         size: "500dp", "30dp"
                         halign: "center"
@@ -115,83 +115,106 @@ WindowManager:
                         center_x: self.parent.center_x
                         padding: 33.5, 0
                         spacing: 10 
-                        TextInput:
+                        MDTextFieldRect:
                             id: first_name_input  # Add the ID
-                            hint_text: 'Firstname'
-                            mode: "round"
+                            hint_text: '  Firstname'
+                            # mode: "round"
                             # input_filter: "str,regex=[a-zA-Z]+"
                             # foreground_color: (1, 1, 1, 1)
                             size_hint: None, None
                             size: 245, 40
                             pos_hint: {'center_x': 0.5}
-                            font_size:20
+                            font_size:18
                             bold: True  # Adjust the width as needed
-                            hint_text_color: 1, 1, 1, 1
+                            hint_text_color: 1, 1, 1, .7
                             background_color: 0, 0, 0, 1  # Fully transparent background                            
-                        TextInput:
+                        MDTextFieldRect:
                             id: last_name_input  # Add the ID
                             foreground_color: (1, 1, 1, 1)
-                            hint_text: 'Secondname'
+                            hint_text: '  Secondname'
                             # input_filter: "str,max_length=20"
                             size_hint: None, None
                             size: 245, 40
                             pos_hint: {'center_x': 0.5}
-                            hint_text_color: 1, 1, 1, 1
+                            hint_text_color: 1, 1, 1, .7
                             background_color: 0, 0, 0, 1
-                            font_size:20
+                            font_size:18
                             bold: True  # Adjust the width as needed
                         
-                    TextInput:
+                    MDTextFieldRect:
                         id: organization_input
-                        hint_text: 'Organization/Institution'
+                        hint_text: '  Organization/Institution'
                         # input_filter: "str,max_length=100"
                         foreground_color: (1, 1, 1, 1)
                         size_hint: None, None
                         size: 500, 40
                         pos_hint: {'center_x': 0.5}
-                        font_size:20
+                        ont_size:18
                         bold: True
-                        hint_text_color: 1, 1, 1, 1
+                        hint_text_color: 1, 1, 1, .7
                         background_color: 0, 0, 0, 1
                         
-                    TextInput:
+                    MDTextFieldRect:
                         id: email_input
-                        hint_text: 'Email address'
+                        hint_text: '  Email address'
                         # input_filter: "str,regex=[a-zA-Z0-9@.]+"
                         foreground_color: (1, 1, 1, 1)
                         size_hint: None, None
                         size: 500, 40
                         pos_hint: {'center_x': 0.5}
-                        font_size:20
+                        ont_size:18
                         bold: True
-                        hint_text_color: 1, 1, 1, 1
+                        hint_text_color: 1, 1, 1, .7
                         background_color: 0, 0, 0, 1    
-                    TextInput:
+                    MDTextFieldRect:
                         id: password_input
-                        hint_text: 'Password'
+                        hint_text: '  Password'
                         password: True
                         foreground_color: (1, 1, 1, 1)
                         size_hint: None, None
                         size: 500, 40
                         pos_hint: {'center_x': 0.5}
-                        font_size:20
+                        font_size:18
                         bold: True
-                        hint_text_color: 1, 1, 1, 1
+                        hint_text_color: 1, 1, 1, .7
                         background_color: 0, 0, 0, 1
-                            
-                    MyButton:
-                        text: 'Sign Up'
-                        size_hint: None, None
-                        size: 200, 40
-                        pos_hint: {'center_x': 0.5}
-                        font_size:20
-                        bold: True
-                        # on_release: app.root.current="Login"
-                        on_release: root.creator()
                     Label:
                         text: ''
                         size_hint: None, None
                         size: 200, 5
+                        pos_hint: {'center_x': 0.5}
+                        font_size:20
+                        bold: True    
+                    MDBoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: 40  # Adjust the height as needed
+                        center_x: self.parent.center_x
+                        padding: 70, 10
+                        spacing:5
+                            
+                        MyButton:
+                            text: 'Sign Up'
+                            size_hint: None, None
+                            size: 200, 40
+                            pos_hint: {'center_x': 0.5}
+                            font_size:20
+                            bold: True
+                            # on_release: app.root.current="Login"
+                            on_release: root.creator()
+                        MyButton:
+                            text: 'Login'
+                            size_hint: None, None
+                            size: 200, 40
+                            pos_hint: {'center_x': 0.5}
+                            font_size:20
+                            bold: True
+                            # on_release: app.root.current="Login"
+                            on_release: root.creator()    
+                    Label:
+                        text: ''
+                        size_hint: None, None
+                        size: 200, 10
                         pos_hint: {'center_x': 0.5}
                         font_size:20
                         bold: True

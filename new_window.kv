@@ -118,13 +118,15 @@ WindowManager:
                         MDTextFieldRect:
                             id: first_name_input  # Add the ID
                             hint_text: '  Firstname'
+                            padding_y:10
+                            # textAlign: TextAlign.center
                             # mode: "round"
                             # input_filter: "str,regex=[a-zA-Z]+"
                             # foreground_color: (1, 1, 1, 1)
                             size_hint: None, None
                             size: 245, 40
                             pos_hint: {'center_x': 0.5}
-                            font_size:18
+                            font_size:15
                             bold: True  # Adjust the width as needed
                             hint_text_color: 1, 1, 1, .7
                             background_color: 0, 0, 0, 1  # Fully transparent background                            
@@ -132,24 +134,26 @@ WindowManager:
                             id: last_name_input  # Add the ID
                             foreground_color: (1, 1, 1, 1)
                             hint_text: '  Secondname'
+                            padding_y:10
                             # input_filter: "str,max_length=20"
                             size_hint: None, None
                             size: 245, 40
                             pos_hint: {'center_x': 0.5}
                             hint_text_color: 1, 1, 1, .7
                             background_color: 0, 0, 0, 1
-                            font_size:18
+                            font_size:15
                             bold: True  # Adjust the width as needed
                         
                     MDTextFieldRect:
                         id: organization_input
                         hint_text: '  Organization/Institution'
+                        padding_y:10
                         # input_filter: "str,max_length=100"
                         foreground_color: (1, 1, 1, 1)
                         size_hint: None, None
                         size: 500, 40
                         pos_hint: {'center_x': 0.5}
-                        ont_size:18
+                        font_size:15
                         bold: True
                         hint_text_color: 1, 1, 1, .7
                         background_color: 0, 0, 0, 1
@@ -157,24 +161,26 @@ WindowManager:
                     MDTextFieldRect:
                         id: email_input
                         hint_text: '  Email address'
+                        padding_y:10
                         # input_filter: "str,regex=[a-zA-Z0-9@.]+"
                         foreground_color: (1, 1, 1, 1)
                         size_hint: None, None
                         size: 500, 40
                         pos_hint: {'center_x': 0.5}
-                        ont_size:18
+                        font_size:15
                         bold: True
                         hint_text_color: 1, 1, 1, .7
                         background_color: 0, 0, 0, 1    
                     MDTextFieldRect:
                         id: password_input
                         hint_text: '  Password'
+                        padding_y:10
                         password: True
                         foreground_color: (1, 1, 1, 1)
                         size_hint: None, None
                         size: 500, 40
                         pos_hint: {'center_x': 0.5}
-                        font_size:18
+                        font_size:15
                         bold: True
                         hint_text_color: 1, 1, 1, .7
                         background_color: 0, 0, 0, 1
@@ -288,7 +294,7 @@ WindowManager:
                             # color: 1, 0, 0, 1
                             # color: 0.7, 0.7, 0.7, 1
                     MDLabel:
-                        text: 'WelCome to Niyantranam'
+                        text: 'Welcome to Niyantranam'
                         size_hint: None, None
                         size: "500dp", "30dp"
                         halign: "center"
@@ -350,15 +356,15 @@ WindowManager:
                         icon_right: 'account'
                         # required:True
                         # theme_text_color: "Secondary"
-                        hint_text_color_normal: "white"
+                        hint_text_color_normal: 1, 1, 1, .7
                         icon_right_color_normal: "white"
-                        hint_text_color: 1, 1, 1, 1
+                        hint_text_color: 
                         background_color: 0, 0, 0, 1
                         foreground_color: 1,1,1,1
                         size_hint: None, None
                         size: 500, 40
                         pos_hint: {'center_x': 0.5}
-                        font_size: 20
+                        font_size: 15
                         bold: True
                         write_tab:False
                         # background_color: 0, 0, 0, 0.5
@@ -367,18 +373,20 @@ WindowManager:
                         id: password_input
                         
                         hint_text: 'Password'
+                        hint_text_color_normal: 1, 1, 1, .7
                         icon_right:'eye-off'
                         password:True
-                        hint_text_color_normal: "white"
+                        # hint_text_color_normal: "white"
                         icon_right_color_normal: "white"
                         # input_filter: "str,regex=[a-zA-Z0-9@.]+"
                         foreground_color: (1, 1, 1, 1)
                         size_hint: None, None
                         size: 500, 40
                         pos_hint: {'center_x': 0.5}
-                        font_size:20
+                        font_size: 12
+                        # hint_text_font_size: 15 
                         bold: True
-                        hint_text_color: 1, 1, 1, 1
+                        hint_text_color: 1, 1, 1, .7
                         background_color: 0, 0, 0, 1
                         write_tab:False
                     BoxLayout:
@@ -399,7 +407,8 @@ WindowManager:
                         MDLabel:
                             text:"Show Password"
                             theme_text_color: "Custom"
-                            text_color: 1, 1, 1, 1
+                            text_color: 1, 1, 1, .7
+                            font_size:15
                             # foreground_color:1,1,1,1
                             markup:True
                             pos_hint: {'center_x': 0.5,'center_y':0.5}
@@ -608,7 +617,7 @@ WindowManager:
                         icon_right: 'account'
                         # required:True
                         # theme_text_color: "Secondary"
-                        hint_text_color_normal: "white"
+                        hint_text_color_normal: 1,1,1,.7
                         icon_right_color_normal: "white"
                         hint_text_color: 1, 1, 1, 1
                         background_color: 0, 0, 0, 1
@@ -627,7 +636,7 @@ WindowManager:
                         hint_text: 'New Password'
                         icon_right:'eye-off'
                         password:True
-                        hint_text_color_normal: "white"
+                        hint_text_color_normal: 1,1,1,.7
                         icon_right_color_normal: "white"
                         # input_filter: "str,regex=[a-zA-Z0-9@.]+"
                         foreground_color: (1, 1, 1, 1)
@@ -645,7 +654,7 @@ WindowManager:
                         hint_text: 'Confirm Password'
                         # icon_right:'eye-off'
                         # password:True
-                        hint_text_color_normal: "white"
+                        hint_text_color_normal: 1,1,1,.7
                         icon_right_color_normal: "white"
                         # input_filter: "str,regex=[a-zA-Z0-9@.]+"
                         foreground_color: (1, 1, 1, 1)

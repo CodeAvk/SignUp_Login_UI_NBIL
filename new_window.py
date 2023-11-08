@@ -2,8 +2,18 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.uix.textinput import TextInput
+from kivymd.uix.textfield import MDTextField
 import pyrebase
 import json
+
+
+# class CustomMDTextField(MDTextField):
+#     def __init__(self, **kwargs):
+#         super().__init__(**kwargs)
+#         self.hint_text_size = 5  # Set hint text size to 15
+
+#     def get_hint_text_size(self):
+#         return self.hint_text_size  # Always return 15
 
 class FirebaseManager:
     def __init__(self):
@@ -73,8 +83,8 @@ class LoginScreen(Screen):
                             print(f"Welcome to {organization}, {first_name}!")
                             return
 
-        print("User not found or incorrect password")
-        print(username, password)
+                    print("User not found or incorrect password")
+                    print(username, password)
 
         
         

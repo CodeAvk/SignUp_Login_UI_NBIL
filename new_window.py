@@ -36,20 +36,34 @@ class SignUpScreen(Screen):
         self.firebase_manager = FirebaseManager()
 
     def creator(self):
+        cond=True
         first_name_input = self.ids.first_name_input.text
         last_name_input = self.ids.last_name_input.text
         organization_input = self.ids.organization_input.text
         email_input = self.ids.email_input.text
         password_input = self.ids.password_input.text
-        data = {
-            "first_name": first_name_input,
-            "last_name": last_name_input,
-            "organization": organization_input,
-            "email": email_input,
-            "password": password_input
-        }
-        self.firebase_manager.db.child(first_name_input).set(data)
-        MDApp.get_running_app().root.current = "Login"
+        
+        database_data=self.firebase_manager.db.get()
+        for single_data in database_data.each():
+            dict=single_data.val()
+            if dict["email"]==email_input:
+                cond=False
+                self.ids.error_label.text = "User already exists"
+        
+        if cond==True:
+            data = {
+                "first_name": first_name_input,
+                "last_name": last_name_input,
+                "organization": organization_input,
+                "email": email_input,
+                "password": password_input
+            }
+            self.firebase_manager.db.child(first_name_input).set(data)
+            MDApp.get_running_app().root.current = "Login"
+
+
+
+
 
 class LoginScreen(Screen):
     def __init__(self, **kw):
@@ -62,29 +76,18 @@ class LoginScreen(Screen):
 
         user_data = self.firebase_manager.db.child(username).get()
         # print("user_data:", user_data) 0x0000020AD23D2B60
-        print("user_data:", user_data.val()) #0x0000020AD23D2B60
-
+        print("user_data:", user_data.val()["password"]) #0x0000020AD23D2B60
+        
+        retrive_password=user_data.val()["password"]
+        retrive_organization=user_data.val()["organization"]
+        if(retrive_password==password):
+            print(f"Welcome to the {retrive_organization}")
+        else:
+            print("No User found")    
+        
         
 
-        if user_data.each():
-            for user in user_data.each():
-                data_str = user.val()
-                
-                # Check if data_str is a non-empty and valid JSON string
-                if data_str and data_str.strip().startswith('{'):
-                    data = json.loads(data_str)
-                    print("data:", type(data))
-
-                    if "password" in data:
-                        print("Stored Password:", data["password"])
-                        if data["password"] == password:
-                            first_name = data.get("first_name", "")  # Use get() to handle missing keys
-                            organization = data.get("organization", "")
-                            print(f"Welcome to {organization}, {first_name}!")
-                            return
-
-                    print("User not found or incorrect password")
-                    print(username, password)
+        
 
         
         

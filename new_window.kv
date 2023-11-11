@@ -118,7 +118,9 @@ WindowManager:
                         MDTextFieldRect:
                             id: first_name_input  # Add the ID
                             hint_text: '  Firstname'
+                            foreground_color: (1, 1, 1, 1)
                             padding_y:10
+                            write_tab:False
                             # textAlign: TextAlign.center
                             # mode: "round"
                             # input_filter: "str,regex=[a-zA-Z]+"
@@ -143,7 +145,7 @@ WindowManager:
                             background_color: 0, 0, 0, 1
                             font_size:15
                             bold: True  # Adjust the width as needed
-                        
+                            write_tab:False
                     MDTextFieldRect:
                         id: organization_input
                         hint_text: '  Organization/Institution'
@@ -157,7 +159,7 @@ WindowManager:
                         bold: True
                         hint_text_color: 1, 1, 1, .7
                         background_color: 0, 0, 0, 1
-                        
+                        write_tab:False
                     MDTextFieldRect:
                         id: email_input
                         hint_text: '  Email address'
@@ -170,7 +172,8 @@ WindowManager:
                         font_size:15
                         bold: True
                         hint_text_color: 1, 1, 1, .7
-                        background_color: 0, 0, 0, 1    
+                        background_color: 0, 0, 0, 1
+                        write_tab:False     
                     MDTextFieldRect:
                         id: password_input
                         hint_text: '  Password'
@@ -184,6 +187,7 @@ WindowManager:
                         bold: True
                         hint_text_color: 1, 1, 1, .7
                         background_color: 0, 0, 0, 1
+                        write_tab:False 
                     Label:
                         text: ''
                         size_hint: None, None
@@ -215,8 +219,8 @@ WindowManager:
                             pos_hint: {'center_x': 0.5}
                             font_size:20
                             bold: True
-                            # on_release: app.root.current="Login"
-                            on_release: root.creator()    
+                            on_release: app.root.current="Login"
+                            # on_release: root.creator()    
                     Label:
                         text: ''
                         size_hint: None, None

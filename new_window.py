@@ -45,9 +45,9 @@ class SignUpScreen(Screen):
         
         database_data=self.firebase_manager.db.get()
         for single_data in database_data.each():
-            dict=single_data.val()
-            if dict["email"]==email_input:
-                cond=False
+            dict = single_data.val()
+            if "email" in dict and dict["email"] == email_input:
+                cond = False
                 self.ids.error_label.text = "User already exists"
         
         if cond==True:

@@ -3,6 +3,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.uix.textinput import TextInput
 from kivymd.uix.textfield import MDTextField
+from kivymd.uix.dialog import MDDialog
 import pyrebase
 import json
 
@@ -44,11 +45,28 @@ class SignUpScreen(Screen):
         password_input = self.ids.password_input.text
         
         database_data=self.firebase_manager.db.get()
-        for single_data in database_data.each():
-            dict = single_data.val()
-            if "email" in dict and dict["email"] == email_input:
-                cond = False
-                self.ids.error_label.text = "User already exists"
+        
+        # Check if database_data is None or empty
+        if not database_data or database_data.each() is None:
+            # If no data is present, add the new user directly
+            data = {
+                "first_name": first_name_input,
+                "last_name": last_name_input,
+                "organization": organization_input,
+                "email": email_input,
+                "password": password_input
+            }
+            self.firebase_manager.db.child(first_name_input).set(data)
+            MDApp.get_running_app().root.current = "Login"
+        else:
+            # Data is present, check if the email already exists
+            cond = True
+            for single_data in database_data.each():
+                dict_data = single_data.val()
+                if "email" in dict_data and dict_data["email"] == email_input:
+                    cond = False
+                    dialog = MDDialog(title="Signup Information", text="User already exists")
+                    dialog.open()
         
         if cond==True:
             data = {
@@ -81,10 +99,13 @@ class LoginScreen(Screen):
         retrive_password=user_data.val()["password"]
         retrive_organization=user_data.val()["organization"]
         if(retrive_password==password):
-            print(f"Welcome to the {retrive_organization}")
+            # print(f"Welcome to the {retrive_organization}")
+            dialog = MDDialog(title="Login Successful", text=f"Welcome to the {retrive_organization}")
+            dialog.open()
         else:
-            print("No User found")    
-        
+            # print("No User found")    
+            dialog = MDDialog(title="Login Failed", text="No User Found")
+            dialog.open()
         
 
         
@@ -95,7 +116,38 @@ class LoginScreen(Screen):
 
 
 class ForgotPasswordScreen(Screen):
-    pass
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.firebase_manager = FirebaseManager()
+
+    def reset_password(self):
+        username = self.ids.userid_input.text
+        new_password = self.ids.new_password_input.text
+        confirm_password = self.ids.cnf_password_input.text
+
+        # Check if new password matches confirm password
+        if new_password != confirm_password:
+            dialog = MDDialog(title="Password Mismatch", text="Passwords do not match.")
+            dialog.open()
+            return
+
+        # Retrieve user data from the database
+        user_data = self.firebase_manager.db.child(username).get()
+
+        # Check if the user exists
+        if user_data.val():
+            # Update the password
+            self.firebase_manager.db.child(username).update({"password": new_password})
+            dialog = MDDialog(title="Password Reset", text="Password updated successfully.")
+            dialog.open()
+        else:
+            dialog = MDDialog(title="User Not Found", text="Username does not exist.")
+            dialog.open()
+
+    def check_inputs(self):
+        # Additional validation or checks if needed before resetting the password
+        self.reset_password()
+
 
 class WindowManager(ScreenManager):
     pass

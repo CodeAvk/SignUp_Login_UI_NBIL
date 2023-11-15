@@ -107,7 +107,7 @@ class LoginScreen(Screen):
             dialog = MDDialog(title="Login Failed", text="No User Found")
             dialog.open()
         
-
+    
         
 
         
@@ -147,7 +147,10 @@ class ForgotPasswordScreen(Screen):
     def check_inputs(self):
         # Additional validation or checks if needed before resetting the password
         self.reset_password()
-
+class OtpVerificationScreen(Screen):
+    pass
+    
+    
 
 class WindowManager(ScreenManager):
     pass

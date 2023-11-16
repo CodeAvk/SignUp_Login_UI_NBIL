@@ -410,7 +410,7 @@ WindowManager:
                             pos_hint: {'center_x': 0.5}
                             font_size:20
                             bold: True
-                            on_release: app.root.current="ForgotPassword"
+                            on_release: root.handle_forgot_password()
                     Label:
                         text: ''
                         size_hint: None, None
@@ -569,7 +569,7 @@ WindowManager:
                         pos_hint: {'center_x': 0.5}
                         font_size:20
                         bold: True
-                        on_release: app.root.current="OtpVerificationScreen" 
+                        on_release: root.check_inputs()
                     Label:
                         text: ''
                         size_hint: None, None
@@ -580,6 +580,7 @@ WindowManager:
 
 <OtpVerificationScreen>:
     name:"OtpVerificationScreen"
+    id: "otp_verification_screen"
 
     
 

@@ -6,6 +6,10 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
 import pyrebase
 import json
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart  # Add this impor
+import random
 
 
 # class CustomMDTextField(MDTextField):
@@ -15,7 +19,7 @@ import json
 
 #     def get_hint_text_size(self):
 #         return self.hint_text_size  # Always return 15
-
+# Gotp = 0
 class FirebaseManager:
     def __init__(self):
         firebase_conf = {
@@ -106,6 +110,66 @@ class LoginScreen(Screen):
             # print("No User found")    
             dialog = MDDialog(title="Login Failed", text="No User Found")
             dialog.open()
+
+
+    def handle_forgot_password(self):
+        username = self.ids.username_input.text
+
+        if not username:
+            dialog = MDDialog(title="Username Required", text="Please enter your username to proceed.")
+            dialog.open()
+        else:
+            # Send OTP functionality here
+            self.send_otp_to_email(username)
+
+    def generate_otp(self):
+        return str(random.randint(1000, 9999))        
+
+    def send_otp_to_email(self, username):
+        user_data = self.firebase_manager.db.child(username).get()
+
+        if user_data.val():
+            email = user_data.val().get("email")
+            generated_otp = self.generate_otp() #i want to acces this generated_otp in side OtpVerificationScreen class
+            # Gotp = self.generate_otp() #i want to acces this generated_otp in side OtpVerificationScreen class
+
+            gmail_user = 'avksmlavk@gmail.com'  # Replace with your Gmail address
+            gmail_password = 'kxbg sdom epmp oszh'  # Replace with your Gmail password
+
+            sent_from = gmail_user
+            to = email
+            subject = 'Your OTP'
+            body = f'Your OTP is: {generated_otp}'
+            # body = f'Your OTP is: {Gotp}'
+
+            msg = MIMEMultipart()
+            msg['From'] = sent_from
+            msg['To'] = to
+            msg['Subject'] = subject
+            msg.attach(MIMEText(body, 'plain'))
+
+            try:
+                server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+                server.login(gmail_user, gmail_password)
+                server.sendmail(sent_from, to, msg.as_string())
+                server.close()
+
+                print(f"OTP sent to {to}: {generated_otp}")
+
+                dialog = MDDialog(title="OTP Sent", text=f"An OTP has been sent to your registered {email}")
+                dialog.open()
+
+                app = MDApp.get_running_app()
+                app.set_generated_otp(generated_otp)
+                app.root.current = "OtpVerificationScreen"
+            except Exception as e:
+                print(f"Failed to send email. Error: {str(e)}")
+
+                dialog = MDDialog(title="Error", text="Failed to send OTP via email.")
+                dialog.open()
+        else:
+            dialog = MDDialog(title="User Not Found", text="Username does not exist.")
+            dialog.open()   
         
     
         
@@ -140,6 +204,11 @@ class ForgotPasswordScreen(Screen):
             self.firebase_manager.db.child(username).update({"password": new_password})
             dialog = MDDialog(title="Password Reset", text="Password updated successfully.")
             dialog.open()
+
+            # Add this line to switch to the login screen after password update
+            app = MDApp.get_running_app()
+            app.root.current = "Login"
+
         else:
             dialog = MDDialog(title="User Not Found", text="Username does not exist.")
             dialog.open()
@@ -148,7 +217,31 @@ class ForgotPasswordScreen(Screen):
         # Additional validation or checks if needed before resetting the password
         self.reset_password()
 class OtpVerificationScreen(Screen):
-    pass
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.generated_otp = None
+
+    # def set_generated_otp(self, otp):
+    #     self.generated_otp = otp    
+
+    def check_inputs(self):
+        entered_otp = self.ids.otp_input.text  # Get entered OTP from the TextInput
+        print(f"inside otpverification {self.generated_otp}")
+
+        app = MDApp.get_running_app()
+        generated_otp = app.generated_otp
+
+        # You'd want to fetch the expected OTP sent to the user's email from the previous screen
+        expected_otp = "1234"  # Replace this with the expected OTP
+
+        if entered_otp == generated_otp:
+            # If entered OTP matches the expected OTP, navigate to ForgotPasswordScreen
+            app = MDApp.get_running_app()
+            app.root.current = "ForgotPassword"
+            
+        else:
+            dialog = MDDialog(title="Invalid OTP", text="Entered OTP is incorrect. Please try again.")
+            dialog.open()
     
     
 
@@ -159,6 +252,7 @@ class AwesomeApp(MDApp):
     def build(self):
         kv = Builder.load_file('new_window.kv')
         return kv
-
+    def set_generated_otp(self, otp):
+        AwesomeApp.generated_otp = otp
 if __name__ == "__main__":
     AwesomeApp().run()

@@ -132,6 +132,9 @@ class LoginScreen(Screen):
             email = user_data.val().get("email")
             generated_otp = self.generate_otp() #i want to acces this generated_otp in side OtpVerificationScreen class
             # Gotp = self.generate_otp() #i want to acces this generated_otp in side OtpVerificationScreen class
+            # Masking the email
+            masked_email = email[0:2] + '*'*(email.index('@')-2) + email[email.index('@'):]
+            # Example: if email is "akvsmlavk@gmail.com", masked_email will be "ak******k@gmail.com"
 
             gmail_user = 'avksmlavk@gmail.com'  # Replace with your Gmail address
             gmail_password = 'kxbg sdom epmp oszh'  # Replace with your Gmail password
@@ -156,7 +159,7 @@ class LoginScreen(Screen):
 
                 print(f"OTP sent to {to}: {generated_otp}")
 
-                dialog = MDDialog(title="OTP Sent", text=f"An OTP has been sent to your registered {email}")
+                dialog = MDDialog(title="OTP Sent", text=f"An OTP has been sent to your registered {masked_email}")
                 dialog.open()
 
                 app = MDApp.get_running_app()
@@ -216,6 +219,7 @@ class ForgotPasswordScreen(Screen):
     def check_inputs(self):
         # Additional validation or checks if needed before resetting the password
         self.reset_password()
+        
 class OtpVerificationScreen(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)

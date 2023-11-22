@@ -4,14 +4,15 @@ WindowManager:
     LoginScreen:
     ForgotPasswordScreen:
     OtpVerificationScreen:
+    WelcomeScreen:
 
     
-<CustomTextInput@TextInput>:
-    canvas.before:
-        Rectangle:
-            source: './bg TextInput.png'  # Replace with the path to your background image
-            pos: self.pos
-            size: self.size
+# <CustomTextInput@TextInput>:
+#     canvas.before:
+#         Rectangle:
+#             source: './bg TextInput.png'  # Replace with the path to your background image
+#             pos: self.pos
+#             size: self.size
 
 <MyButton@Button>:
     background_color: 0,0,0,0
@@ -26,7 +27,83 @@ WindowManager:
             pos: self.pos
             size: self.size
             radius: [18]  # Adjust the radius values for the desired curvature
+<WelcomeScreen>:
+    name:"Welcome"
+    MDBoxLayout:
+        id: main_layout
+        orientation: 'horizontal'
+        # size_hint: .7, 1
+        # size: self.size[0] * 2, self.size[1] * 2
+        canvas.before:
+            Color:
+                rgba: 4/255, 7/255, 30/255,  1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                # size: self.size[0] * 2, self.size[1] * 2
 
+        MDBoxLayout:
+            id: left_layout
+            orientation: 'vertical'
+            size_hint: .7, 1
+
+            Image:
+                source: './UI niyantranam.jpg'  # Replace with the path to your image
+                size: 400, 600
+                allow_stretch: True
+                keep_ratio: False
+
+        RelativeLayout:
+            id: right_layout
+            MDBoxLayout:
+                orientation: 'vertical'
+                size_hint: None, None
+                width: "470dp"
+                height: self.minimum_height
+                center_x: self.parent.center_x
+                top: self.parent.top - 10
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                spacing: 10 
+
+                # Additional BoxLayout for Labels, TextInputs, and Button
+                MDBoxLayout:
+                    id: sub_layout
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height * 1.1
+                    center_x: self.parent.center_x
+                    padding: [10, 0]
+                    spacing: 10 
+                    # size_hint: 1, 1                    
+                    canvas.before:
+                        Color:
+                            rgba: 36/255, 29/255, 58/255,  1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [30, 30, 30, 30]
+                            # color: 1, 0, 0, 1
+                            # color: 0.7, 0.7, 0.7, 1
+                    MDLabel:
+                        text: 'Welcome to the Screen'
+                        size_hint: None, None
+                        size: "500dp", "30dp"
+                        halign: "center"
+                        # pos_hint: {'center_x': 0.5,'center_y': 0.5}
+                        font_size:24
+                        bold: True
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1  # White color (R, G, B, A)
+
+                     
+                    MDLabel:
+                        text: ''
+                        size_hint: None, None
+                        size: "500dp", "20dp"
+                        halign: "center"
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1
+                    
 <SignUpScreen>:
     name:"SignUp"
     MDBoxLayout:

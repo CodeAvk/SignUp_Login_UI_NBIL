@@ -106,6 +106,10 @@ class LoginScreen(Screen):
             # print(f"Welcome to the {retrive_organization}")
             dialog = MDDialog(title="Login Successful", text=f"Welcome to the {retrive_organization}")
             dialog.open()
+            app = MDApp.get_running_app()
+            # app.set_generated_otp(generated_otp)
+            app.root.current = "Welcome"
+
         else:
             # print("No User found")    
             dialog = MDDialog(title="Login Failed", text="No User Found")
@@ -247,7 +251,8 @@ class OtpVerificationScreen(Screen):
             dialog = MDDialog(title="Invalid OTP", text="Entered OTP is incorrect. Please try again.")
             dialog.open()
     
-    
+class WelcomeScreen(Screen):
+    pass  
 
 class WindowManager(ScreenManager):
     pass

@@ -85,6 +85,7 @@ WindowManager:
                             # color: 1, 0, 0, 1
                             # color: 0.7, 0.7, 0.7, 1
                     MDLabel:
+                        id:welcome_user
                         text: 'Welcome to the Screen'
                         size_hint: None, None
                         size: "500dp", "30dp"
@@ -103,7 +104,31 @@ WindowManager:
                         halign: "center"
                         theme_text_color: "Custom"
                         text_color: 1, 1, 1, 1
+
+                    DropDown:
+                        id: dropdown
+                        options: 'Option 1', 'Option 2', 'Option 3'
+                        on_select: app.on_option_select
+
+                        Button:
+                            text: 'Option 1'
+                            size_hint_y: None
+                            height: 40
+                            on_release: dropdown.select(self.text)
+
+                        Button:
+                            text: 'Option 2'
+                            size_hint_y: None
+                            height: 40
+                            on_release: dropdown.select(self.text)
+                        
+
+                
                     
+
+                        
+
+                  
 <SignUpScreen>:
     name:"SignUp"
     MDBoxLayout:

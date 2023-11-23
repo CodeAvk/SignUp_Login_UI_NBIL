@@ -1,6 +1,7 @@
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
+from kivymd.uix.dropdownitem import MDDropDownItem
 from kivy.uix.textinput import TextInput
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
@@ -103,6 +104,18 @@ class LoginScreen(Screen):
         retrive_password=user_data.val()["password"]
         retrive_organization=user_data.val()["organization"]
         if(retrive_password==password):
+
+             # Fetch username from the user data
+            retrive_username = user_data.val().get("first_name")
+
+             # Create a reference to the WelcomeScreen
+            welcome_screen = MDApp.get_running_app().root.get_screen("Welcome")
+
+            # Pass the username to the WelcomeScreen
+            # welcome_screen.update_username(retrive_username)
+
+
+
             # print(f"Welcome to the {retrive_organization}")
             dialog = MDDialog(title="Login Successful", text=f"Welcome to the {retrive_organization}")
             dialog.open()
@@ -252,8 +265,18 @@ class OtpVerificationScreen(Screen):
             dialog.open()
     
 class WelcomeScreen(Screen):
-    pass  
 
+    def on_dropdown_select(self, instance, option):
+        print(f'Selected option: {option}')
+    
+    # def update_username(self, username):
+    #     # Update the options_button text with the retrieved username
+    #     options_button = self.ids.options_button
+    #     options_button.text = f"Welcome, {username}" if username else "Options"
+
+    # def get_username(self):
+    #     # Fetch the current username from your data or session
+    #     return "Current_User"  # Replace this with the actual username
 class WindowManager(ScreenManager):
     pass
 
@@ -263,5 +286,7 @@ class AwesomeApp(MDApp):
         return kv
     def set_generated_otp(self, otp):
         AwesomeApp.generated_otp = otp
+    def on_option_select(self, text):
+        print(f"Selected option: {text}")    
 if __name__ == "__main__":
     AwesomeApp().run()

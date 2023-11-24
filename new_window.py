@@ -5,6 +5,7 @@ from kivymd.uix.dropdownitem import MDDropDownItem
 from kivy.uix.textinput import TextInput
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
+import time 
 import pyrebase
 import json
 import smtplib
@@ -92,6 +93,7 @@ class LoginScreen(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
         self.firebase_manager = FirebaseManager()
+        self.current_username_login = None 
 
     def print(self):
         username = self.ids.username_input.text
@@ -107,6 +109,7 @@ class LoginScreen(Screen):
 
              # Fetch username from the user data
             retrive_username = user_data.val().get("first_name")
+            self.current_username_login = retrive_username 
 
              # Create a reference to the WelcomeScreen
             welcome_screen = MDApp.get_running_app().root.get_screen("Welcome")
@@ -117,7 +120,7 @@ class LoginScreen(Screen):
 
 
             # print(f"Welcome to the {retrive_organization}")
-            dialog = MDDialog(title="Login Successful", text=f"Welcome to the {retrive_organization}")
+            dialog = MDDialog(title="Login Successful", text=f"Welcome to the{retrive_username} {retrive_organization}")
             dialog.open()
             app = MDApp.get_running_app()
             # app.set_generated_otp(generated_otp)
@@ -265,9 +268,12 @@ class OtpVerificationScreen(Screen):
             dialog.open()
     
 class WelcomeScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.firebase_manager = FirebaseManager()
 
-    def on_dropdown_select(self, instance, option):
-        print(f'Selected option: {option}')
+    # def on_dropdown_select(self, instance, option):
+    #     print(f'Selected option: {option}')
     
     # def update_username(self, username):
     #     # Update the options_button text with the retrieved username
@@ -281,12 +287,66 @@ class WindowManager(ScreenManager):
     pass
 
 class AwesomeApp(MDApp):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        self.firebase_manager = FirebaseManager()
     def build(self):
         kv = Builder.load_file('new_window.kv')
         return kv
     def set_generated_otp(self, otp):
         AwesomeApp.generated_otp = otp
     def on_option_select(self, text):
-        print(f"Selected option: {text}")    
+        print(f"Selected option: {text}") 
+    def save_to_firebase(self, text):
+        # firebase_manager = self.root.get_screen("Welcome").firebase_manager
+        login_screen = self.root.get_screen("Login")
+        
+        # Fetch current username from LoginScreen
+        current_user = login_screen.current_username_login
+
+        # Create a reference to the current user's node
+        user_ref =self.firebase_manager.db.child(current_user)
+        timestamp = time.time()
+        new_child_name = "GCODES"  # You can use any desired name
+        new_child_ref = user_ref.child(new_child_name)
+
+        # Fetch the count of existing work entries for the user
+        user_data = user_ref.update({"text": text, "timestamp": timestamp})
+        # print(F"user data inside save to fire base {user_data.val()}")
+        # work_entries_count = len(user_data.val()) if user_data.val() else 0
+
+        # # Append the work entry index to the username
+        # username_with_work_index = f"username_work{work_entries_count + 1}"
+
+        # # Generate a unique timestamp to differentiate saved entries
+        # timestamp = time.time()
+
+        # # Create a unique entry with the composed username and set the text and timestamp under it
+        # new_entry_ref = user_ref.child(username_with_work_index)
+        # new_entry_ref.update({"text": text, "timestamp": timestamp})
+        # print("User reference path:", user_ref.path)
+
+
+    def open_from_firebase(self):
+        # Access FirebaseManager instance
+        firebase_manager = self.root.get_screen("Welcome").firebase_manager
+
+        # # Fetch current username (You might need a method to fetch this based on your login system)
+        # current_username = "username_here"
+        
+
+        # Fetch the last saved text for the current user from Firebase
+       
+        login_screen = self.root.get_screen("Login")
+        user_data = firebase_manager.db.child(login_screen.current_username_login).get()
+        print(f"current user {login_screen.current_username_login}")
+
+        if user_data.val():
+            last_saved_text = user_data.val().get("text", "")
+            # Update the TextInput with the last saved text
+            self.root.get_screen("Welcome").ids.editor.text = last_saved_text
+            print("Last saved text retrieved and displayed.")
+        else:
+            print("No saved text found for the current user.")           
 if __name__ == "__main__":
     AwesomeApp().run()

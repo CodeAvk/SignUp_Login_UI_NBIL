@@ -55,72 +55,25 @@ WindowManager:
 
         RelativeLayout:
             id: right_layout
-            MDBoxLayout:
-                orientation: 'vertical'
+            TextInput:
+                id: editor
+                hint_text: "Write something here..."
+                foreground_color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0.5
+                font_size: 18
+                size_hint: 1, 1
+                height: 200
+                multiline: True
+            MDRectangleFlatButton:
+                text: "Save"
                 size_hint: None, None
-                width: "470dp"
-                height: self.minimum_height
-                center_x: self.parent.center_x
-                top: self.parent.top - 10
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                spacing: 10 
-
-                # Additional BoxLayout for Labels, TextInputs, and Button
-                MDBoxLayout:
-                    id: sub_layout
-                    orientation: 'vertical'
-                    size_hint_y: None
-                    height: self.minimum_height * 1.1
-                    center_x: self.parent.center_x
-                    padding: [10, 0]
-                    spacing: 10 
-                    # size_hint: 1, 1                    
-                    canvas.before:
-                        Color:
-                            rgba: 36/255, 29/255, 58/255,  1
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [30, 30, 30, 30]
-                            # color: 1, 0, 0, 1
-                            # color: 0.7, 0.7, 0.7, 1
-                    MDLabel:
-                        id:welcome_user
-                        text: 'Welcome to the Screen'
-                        size_hint: None, None
-                        size: "500dp", "30dp"
-                        halign: "center"
-                        # pos_hint: {'center_x': 0.5,'center_y': 0.5}
-                        font_size:24
-                        bold: True
-                        theme_text_color: "Custom"
-                        text_color: 1, 1, 1, 1  # White color (R, G, B, A)
-
-                     
-                    MDLabel:
-                        text: ''
-                        size_hint: None, None
-                        size: "500dp", "20dp"
-                        halign: "center"
-                        theme_text_color: "Custom"
-                        text_color: 1, 1, 1, 1
-
-                    DropDown:
-                        id: dropdown
-                        options: 'Option 1', 'Option 2', 'Option 3'
-                        on_select: app.on_option_select
-
-                        Button:
-                            text: 'Option 1'
-                            size_hint_y: None
-                            height: 40
-                            on_release: dropdown.select(self.text)
-
-                        Button:
-                            text: 'Option 2'
-                            size_hint_y: None
-                            height: 40
-                            on_release: dropdown.select(self.text)
+                size: 100, 40
+                pos_hint: {'right': 1, 'bottom': 1}
+                on_release: app.save_to_firebase(editor.text)    
+            MDRectangleFlatButton:
+                text: "Open"
+                pos_hint: {'right': 1, 'top': 1}
+                on_release: app.open_from_firebase()  # Call method to open last saved text
                         
 
                 

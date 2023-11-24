@@ -5,6 +5,9 @@ from kivymd.uix.dropdownitem import MDDropDownItem
 from kivy.uix.textinput import TextInput
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
 import time 
 import pyrebase
 import json
@@ -311,42 +314,38 @@ class AwesomeApp(MDApp):
         new_child_ref = user_ref.child(new_child_name)
 
         # Fetch the count of existing work entries for the user
-        user_data = user_ref.update({"text": text, "timestamp": timestamp})
-        # print(F"user data inside save to fire base {user_data.val()}")
-        # work_entries_count = len(user_data.val()) if user_data.val() else 0
-
-        # # Append the work entry index to the username
-        # username_with_work_index = f"username_work{work_entries_count + 1}"
-
-        # # Generate a unique timestamp to differentiate saved entries
-        # timestamp = time.time()
-
-        # # Create a unique entry with the composed username and set the text and timestamp under it
-        # new_entry_ref = user_ref.child(username_with_work_index)
-        # new_entry_ref.update({"text": text, "timestamp": timestamp})
-        # print("User reference path:", user_ref.path)
+        user_data = user_ref.push({"text": text, "timestamp": timestamp})
+        
 
 
     def open_from_firebase(self):
-        # Access FirebaseManager instance
-        firebase_manager = self.root.get_screen("Welcome").firebase_manager
-
-        # # Fetch current username (You might need a method to fetch this based on your login system)
-        # current_username = "username_here"
-        
-
-        # Fetch the last saved text for the current user from Firebase
-       
         login_screen = self.root.get_screen("Login")
-        user_data = firebase_manager.db.child(login_screen.current_username_login).get()
-        print(f"current user {login_screen.current_username_login}")
+            
+        # Fetch current username from LoginScreen
+        current_user = login_screen.current_username_login
 
-        if user_data.val():
-            last_saved_text = user_data.val().get("text", "")
-            # Update the TextInput with the last saved text
-            self.root.get_screen("Welcome").ids.editor.text = last_saved_text
-            print("Last saved text retrieved and displayed.")
+        # Create a reference to the current user's "GCODES" node
+        user_ref = self.firebase_manager.db.child(current_user).child("GCODES")
+        
+        # Fetch all entries under "GCODES" node
+        all_entries = user_ref.get()
+        
+        # Create a BoxLayout to hold the Label widgets
+        content = BoxLayout(orientation='vertical', spacing=10)
+        
+        if all_entries.each():
+            for entry in all_entries.each():
+                text = entry.val()  # Get the text directly
+                if isinstance(text, dict):
+                    text = str(text.get('text', ''))
+                text_label = Label(text=str(text))
+                content.add_widget(text_label)
         else:
-            print("No saved text found for the current user.")           
+            no_entry_label = Label(text="No entries found.")
+            content.add_widget(no_entry_label)
+
+        # Create a Popup to display the text entries
+        popup = Popup(title='Text Entries', content=content, size_hint=(None, None), size=(400, 400))
+        popup.open()       
 if __name__ == "__main__":
     AwesomeApp().run()

@@ -369,7 +369,14 @@ class AwesomeApp(MDApp):
 
     def open_entry(self, text):
         # Handle opening an entry (e.g., display it in another screen or popup)
-        pass
+        welcome_screen = self.root.get_screen("Welcome")
+        text_input = welcome_screen.ids.editor  # Access the TextInput widget
+
+        # Set the text in the TextInput of the WelcomeScreen
+        text_input.text = text
+
+        # Change the screen to the WelcomeScreen (if needed)
+        self.root.current = "Welcome"
 
     def delete_entry(self, current_user, entry_key):
         # Handle deleting an entry from Firebase

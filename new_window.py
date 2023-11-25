@@ -7,6 +7,8 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivymd.uix.button import MDRectangleFlatButton
 from kivy.uix.boxlayout import BoxLayout
 import time 
 import pyrebase
@@ -330,7 +332,7 @@ class AwesomeApp(MDApp):
         # Fetch all entries under "GCODES" node
         all_entries = user_ref.get()
         
-        # Create a BoxLayout to hold the Label widgets
+        # Create a BoxLayout to hold the widgets
         content = BoxLayout(orientation='vertical', spacing=10)
         
         if all_entries.each():
@@ -338,14 +340,42 @@ class AwesomeApp(MDApp):
                 text = entry.val()  # Get the text directly
                 if isinstance(text, dict):
                     text = str(text.get('text', ''))
+                
+                # Create a Label for text
                 text_label = Label(text=str(text))
-                content.add_widget(text_label)
+                
+                # Create buttons
+                open_button = MDRectangleFlatButton(text="Open")
+                delete_button = MDRectangleFlatButton(text="Delete")
+                
+                # Define button actions
+                open_button.bind(on_press=lambda instance, label=text_label.text: self.open_entry(label))
+                delete_button.bind(on_press=lambda instance, entry_key=entry.key(): self.delete_entry(current_user, entry_key))
+                
+                # Add Label and buttons to the layout
+                entry_layout = BoxLayout(orientation='horizontal', spacing=10)
+                entry_layout.add_widget(text_label)
+                entry_layout.add_widget(open_button)
+                entry_layout.add_widget(delete_button)
+                
+                content.add_widget(entry_layout)
         else:
             no_entry_label = Label(text="No entries found.")
             content.add_widget(no_entry_label)
 
-        # Create a Popup to display the text entries
-        popup = Popup(title='Text Entries', content=content, size_hint=(None, None), size=(400, 400))
-        popup.open()       
+        # Create a Popup to display the entries
+        popup = Popup(title='Text Entries', content=content, size_hint=(None, None), size=(500, 500))
+        popup.open()
+
+    def open_entry(self, text):
+        # Handle opening an entry (e.g., display it in another screen or popup)
+        pass
+
+    def delete_entry(self, current_user, entry_key):
+        # Handle deleting an entry from Firebase
+        user_ref = self.firebase_manager.db.child(current_user).child("GCODES")
+        user_ref.child(entry_key).remove()
+        # After deletion, you might want to refresh the displayed entries or update the UI accordingly
+        
 if __name__ == "__main__":
     AwesomeApp().run()

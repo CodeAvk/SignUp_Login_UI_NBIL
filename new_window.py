@@ -318,6 +318,7 @@ class AwesomeApp(MDApp):
         # Fetch the count of existing work entries for the user
         user_data = user_ref.push({"text": text, "timestamp": timestamp})
         
+        
 
 
     def open_from_firebase(self):

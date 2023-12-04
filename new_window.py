@@ -10,6 +10,9 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivymd.uix.button import MDRectangleFlatButton
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.filechooser import FileChooserListView
+import os
+import base64
 import time 
 import pyrebase
 import json
@@ -291,6 +294,11 @@ class WelcomeScreen(Screen):
 class WindowManager(ScreenManager):
     pass
 
+
+    # def __init__(self, text="", path="", **kwargs):
+    #     super().__init__(text=text, path=path, **kwargs)
+    #     self.custom_data = None
+
 class AwesomeApp(MDApp):
     def __init__(self, **kw):
         super().__init__(**kw)
@@ -384,6 +392,118 @@ class AwesomeApp(MDApp):
         user_ref = self.firebase_manager.db.child(current_user).child("GCODES")
         user_ref.child(entry_key).remove()
         # After deletion, you might want to refresh the displayed entries or update the UI accordingly
+    def choose_file(self):
+        desktop_path = os.path.expanduser("~/Desktop/GCodes")  # Get the path to the desktop directory
+
+        file_chooser = FileChooserListView(path=desktop_path)  # Set the path to the desktop directory
+        file_chooser.filters = ['*.gcode']
+        file_chooser.bind(on_submit=self.selected)
+
+        popup = Popup(title='Select .gcode file', content=file_chooser, size_hint=(0.9, 0.9))
+        popup.open()
+
+    def selected(self, instance, value,*args):
+        if value:
+            file_path = value[0]
+            welcome_screen = self.root.get_screen("Welcome")
+            file_path_text = welcome_screen.ids.file_path_text
+            file_path_text.text = file_path
+
+            # Here, you can upload 'file_path' to the cloud or perform other operations
+             # Upload the selected GCODE file to Firebase
+            # self.upload_file(file_path)
+    def upload_file(self, file_path):
+        firebase_manager = self.firebase_manager
+        shared_files_ref = firebase_manager.db.child("SharedFiles")  # Reference to the shared files node
+
+        # Extract the file name from the file path
+        file_name = os.path.basename(file_path)
+        print(file_name)
+
+
+        # Convert byte stream to base64 encoded string
+        with open(file_path, 'rb') as file:
+            file_data = file.read()
+            encoded_data = base64.b64encode(file_data).decode('utf-8')
+
+            # Create a dictionary with the file name as key and encoded data as value
+        # data_to_push = {file_name.split('.')[0]: encoded_data}  # Using split to remove file extension
+        data_to_push = {"name": file_name, "data": encoded_data}  # Using split to remove file extension
+        print(data_to_push)
+
+        # Push the dictionary containing file name and encoded data to the shared files node
+        shared_files_ref.push(data_to_push)
+
+        dialog = MDDialog(title="Upload Successful", text="File uploaded successfully to shared files.")
+        dialog.open()
         
+    def show_cloud_files(self):
+        firebase_manager = self.firebase_manager
+        shared_files_ref = firebase_manager.db.child("SharedFiles")  # Reference to the shared files node
+
+        # Fetch all entries under "SharedFiles" node
+        all_files = shared_files_ref.get()
+
+        # Create a BoxLayout to hold the list of files
+        content = BoxLayout(orientation='vertical', spacing=10)
+
+        if all_files:
+            for file_entry in all_files.each():
+                file_name = file_entry.val().get('name')  # Get the file name without extension
+                file_data = file_entry.val().get('data')  # Get the file data
+                # print(file_name,file_data)
+                # Create a BoxLayout to hold the label and button
+                file_layout = BoxLayout(orientation='horizontal', spacing=10)
+
+                # Create a label to represent the file entry
+                file_label = Label(text=f"File: {file_name}")  # Display filename or any identifier
+                file_layout.add_widget(file_label)
+
+                # Create a button to open the file or handle the data
+                file_button = Button(text="Open File")
+
+                # Bind button press action to open the file or handle the data
+                file_button.bind(
+                    on_release=lambda instance, data=(file_name, file_data): self.open_cloud_file(data)
+                )
+                file_layout.add_widget(file_button)
+
+                # Add the label and button to the layout
+                content.add_widget(file_layout)
+        else:
+            no_file_label = Label(text="No files found.")
+            content.add_widget(no_file_label)
+
+        # Create a Popup to display the files
+        popup = Popup(title='Cloud Files', content=content, size_hint=(None, None), size=(500, 500))
+        popup.open()
+            
+    def open_cloud_file(self, data):
+            # Access the TextInput widget from the WelcomeScreen
+        welcome_screen = self.root.get_screen("Welcome")
+        text_input = welcome_screen.ids.editor  # Access the TextInput widget
+
+        # Get the file data from the passed data tuple
+        file_name, file_data = data
+
+        # Decode the file data from base64 to text
+        decoded_data = base64.b64decode(file_data).decode('latin-1')
+
+        # Set the decoded data in the TextInput
+        text_input.text = decoded_data
+
+        # Change the screen to the WelcomeScreen
+        self.root.current = "Welcome"
+
+        
+        
+
+
+
+
+
+    
+        
+
 if __name__ == "__main__":
     AwesomeApp().run()

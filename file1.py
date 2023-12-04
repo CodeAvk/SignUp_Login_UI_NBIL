@@ -1,0 +1,1 @@
+variable_in_file1 = "556adakndajskancjk"

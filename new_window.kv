@@ -64,16 +64,39 @@ WindowManager:
                 size_hint: 1, 1
                 height: 200
                 multiline: True
-            MDRectangleFlatButton:
-                text: "Save"
-                size_hint: None, None
-                size: 100, 40
-                pos_hint: {'right': 1, 'bottom': 1}
-                on_release: app.save_to_firebase(editor.text)    
-            MDRectangleFlatButton:
-                text: "Open"
-                pos_hint: {'right': 1, 'top': 1}
-                on_release: app.open_from_firebase()  # Call method to open last saved text
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: "40dp"
+                TextInput:
+                    id: file_path_text
+                    hint_text: "Selected file path"
+                    readonly: True
+                MDRectangleFlatButton:
+                    text: "Choose"
+                    size_hint: None, 1
+                    width: "100dp"
+                    on_release: app.choose_file()
+                MDRectangleFlatButton:
+                    text: "Upload"
+                    size_hint: None, 1
+                    width: "100dp"
+                    on_release: app.upload_file(file_path_text.text)
+                MDRectangleFlatButton:
+                    text: "Choose From Cloud"
+                    size_hint: None, 1
+                    width: "100dp"
+                    on_release:app.show_cloud_files()        
+            # MDRectangleFlatButton:
+            #     text: "Save"
+            #     size_hint: None, None
+            #     size: 100, 40
+            #     pos_hint: {'right': 1, 'bottom': 1}
+            #     on_release: app.save_to_firebase(editor.text)    
+            # MDRectangleFlatButton:
+            #     text: "Open"
+            #     pos_hint: {'right': 1, 'top': 1}
+            #     on_release: app.open_from_firebase()  # Call method to open last saved text
                         
 
                 
